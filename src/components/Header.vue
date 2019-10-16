@@ -23,7 +23,7 @@
 export default {
   data() {
     return {
-      defaultSearchMsg: "What are you looking for?"
+      defaultSearchMsg: "What are you looking for?!"
     };
   }
 };
