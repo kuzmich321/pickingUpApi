@@ -1,15 +1,18 @@
 <template>
   <div id="app">
     <app-header></app-header>
+    <app-showcase></app-showcase>
   </div>
 </template>
 
 <script>
 import Header from "./components/Header.vue";
+import Showcase from "./components/Showcase.vue";
 
 export default {
   components: {
-    appHeader: Header
+    appHeader: Header,
+    appShowcase: Showcase
   }
 };
 </script>
@@ -25,10 +28,11 @@ export default {
 
 #app {
   height: 100vh;
-  background-color: #141b20;
+  background-color: #fff;
 }
 
 .container {
   width: 80%;
+  margin: auto;
 }
 </style>

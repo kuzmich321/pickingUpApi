@@ -33,9 +33,10 @@ export default {
 header {
   width: 100%;
   height: 60px;
-  border-bottom: 1px solid #ef1746;
+  border-bottom: 1px solid #;
   margin: auto;
   margin-bottom: 30px;
+  background-color: #151515;
 }
 
 .header-wrapper {
