@@ -1,38 +1,52 @@
 <template>
   <div class="showcase">
-    <app-image-item :images="images"></app-image-item>
+    <div class="photos-wrapper" v-for="divsCount in images">
+      <app-image-item v-for="image in divsCount" :image="image"></app-image-item>
+    </div>
   </div>
 </template>
 
 <script>
-import Vue from "vue";
 import axios from "axios";
-import VueAxios from "vue-axios";
 import ImageItem from "./ImageItem.vue";
 
 export default {
   data() {
     return {
-      images: []
+      images: [],
+      divsCount: 3
     };
   },
   components: {
     appImageItem: ImageItem
   },
   methods: {
-    transferImages() {
-      this.$emit("imagesWereTransferred", this.images);
+    chunk(arr, size) {
+      const optimalSize = Math.floor(arr.length / size);
+      return Array.from(
+        { length: Math.ceil(arr.length / optimalSize) },
+        (v, i) => arr.slice(i * optimalSize, i * optimalSize + optimalSize)
+      );
     }
   },
   mounted() {
-    Vue.use(VueAxios, axios);
-
-    Vue.axios.get(" http://localhost:5000/api/photos").then(res => {
-      this.images = res.data;
+    this.axios.get(" http://localhost:5000/api/photos").then(res => {
+      this.images = this.chunk(res.data, this.divsCount);
     });
   }
 };
 </script>
 
 <style scoped>
+.showcase {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.photos-wrapper {
+  max-width: 33%;
+  padding: 0 5px;
+}
 </style>

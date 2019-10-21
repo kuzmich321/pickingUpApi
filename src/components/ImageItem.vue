@@ -1,22 +1,20 @@
 <template>
-  <div class="showcase">
-    <div class="photos-wrapper" v-for="image in images">
-      <img :src="image.urls.small" alt />
-    </div>
+  <div class="single-image">
+    <img :src="image.urls.small" alt />
   </div>
 </template>
 
 <script>
 export default {
-  props: ["images"],
+  props: { image: Object },
   methods: {}
 };
 </script>
 
 <style scoped>
-.showcase {
-  display: grid;
-  grid-template-columns: repeat(3, auto);
-  grid-auto-columns: auto;
+.single-image img {
+  margin-top: 8px;
+  vertical-align: middle;
+  width: 100%;
 }
 </style>
