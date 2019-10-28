@@ -1,31 +1,23 @@
 global.fetch = require('node-fetch');
 const config = require('universal-config');
-const Unsplash = require('unsplash-js').default;
-const toJson = require('unsplash-js').toJson;
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
+const dotenv = require('dotenv');
 
-const unsplash = new Unsplash({
-  applicationId: config.get('APPLICATION_ID'),
-  secret: config.get('SECRET'),
-  callbackUrl: config.get('CALLBACK_URL')
-});
+dotenv.config({ path: './config.env' });
 
 const app = express();
 
-app.use(morgan('combined'));
+app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.get('/api/photos', (req, res) => {
-  unsplash.photos
-    .listPhotos(1, 30)
-    .then(toJson)
-    .then(json => res.json(json));
-});
+app.use('/api/v1/photos', require('../routes/profile'));
 
-const PORT = process.env.PORT || 5000;
+const port = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+app.listen(port, () =>
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`)
+);
