@@ -5,8 +5,8 @@
         <app-image-item v-for="image in divsCount" :image="image"></app-image-item>
       </div>
     </div>
-    <button>Second</button>
-    <a>URL : {{}}</a>
+    <button @click="pageChangeHandle(2, 30)">Second</button>
+    <a>URL: {{unsplashUrl}}</a>
   </div>
 </template>
 
@@ -17,7 +17,7 @@ import ImageItem from "./ImageItem.vue";
 export default {
   data() {
     return {
-      PHOTOS_URL: process.env.UNSPLASH_URL,
+      unsplashUrl: process.env.VUE_APP_UNSPLASH_URL,
       images: [],
       divsCount: 3,
       currentPage: 1,
@@ -46,18 +46,15 @@ export default {
         default:
           this.currentPage = value;
       }
-      const { getApi } = await this.axios.get(
-        "http://localhost:3000/api/v1/photos",
-        {
-          params: { client_id: process.env.VUE_APP_API_KEY }
-        }
-      );
+      const { getApi } = await this.axios.get(this.unsplashUrl, {
+        params: { client_id: process.env.VUE_APP_API_KEY }
+      });
     }
   },
   async mounted() {
     try {
       const { getApi } = await this.axios
-        .get("http://localhost:3000/api/v1/photos", {
+        .get(`${this.unsplashUrl}`, {
           params: { client_id: process.env.VUE_APP_API_KEY }
         })
         .then(res => (this.images = this.chunk(res.data, this.divsCount)));

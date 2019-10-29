@@ -7,7 +7,7 @@ const toJson = require('unsplash-js').toJson;
 const unsplash = new Unsplash({
   applicationId: process.env.VUE_APP_API_KEY,
   secret: process.env.VUE_APP_API_SECRET_KEY,
-  callbackUrl: process.env.VUE_APP_UNSPLASH_URL
+  callbackUrl: process.env.UNSPLASH_URL
 });
 
 router.get('/', async (req, res) => {

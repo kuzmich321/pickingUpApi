@@ -74,3 +74,16 @@ if (process.env.NODE_ENV === 'production') {
     })
   ]);
 }
+
+if (process.env.NODE_ENV === 'development') {
+  module.exports.plugins = (module.exports.plugins || []).concat([
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: '"development"',
+        VUE_APP_UNSPLASH_URL: '"https://api.unsplash.com/photos"',
+        VUE_APP_API_KEY:
+          '"2cb66408c74d7c65dee1dfd14ce2426b71c3e0be54d380580fcad12bae5f4221"'
+      }
+    })
+  ]);
+}
