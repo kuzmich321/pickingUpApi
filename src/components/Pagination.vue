@@ -1,6 +1,6 @@
 <template>
   <section class="base-pagination">
-    
+    <paginate :pageCount="totalPages" :containerClass="'pagination'"></paginate>
   </section>
 </template>
 
@@ -8,8 +8,13 @@
 export default {
   data() {
     return {
-      numberOfPages: 10
+      totalPages: 10
     };
+  },
+  methods: {
+    getCurrentPage(page) {
+      this.$emit("currentPageRecieved", page);
+    }
   }
 };
 </script>

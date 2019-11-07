@@ -5,27 +5,28 @@
         <app-image-item v-for="image in divsCount" :image="image"></app-image-item>
       </div>
     </div>
-    <button @click="pageChangeHandle(2, 30)">Second</button>
-    <a>URL: {{unsplashUrl}}</a>
+    <button @click="getImages(2, 30)">Second</button>
+    <app-pagination @currentPageRecieved="getImages(page, 30)"></app-pagination>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import ImageItem from "./ImageItem.vue";
+import Pagination from "./Pagination.vue";
+import Unsplash, { toJson } from "unsplash-js";
 
 export default {
   data() {
     return {
       unsplashUrl: process.env.VUE_APP_UNSPLASH_URL,
       images: [],
-      divsCount: 3,
-      currentPage: 1,
-      pageCount: 10
+      divsCount: 3
     };
   },
   components: {
-    appImageItem: ImageItem
+    appImageItem: ImageItem,
+    appPagination: Pagination
   },
   methods: {
     chunk(arr, size) {
@@ -35,32 +36,24 @@ export default {
         (v, i) => arr.slice(i * optimalSize, i * optimalSize + optimalSize)
       );
     },
-    async pageChangeHandle(value) {
-      switch (value) {
-        case "next":
-          this.currentPage += 1;
-          break;
-        case "previous":
-          this.currentPage -= 1;
-          break;
-        default:
-          this.currentPage = value;
+    getImages(page, per_page) {
+      try {
+        axios
+          .get(this.unsplashUrl, {
+            params: {
+              client_id: process.env.VUE_APP_API_KEY,
+              page,
+              per_page
+            }
+          })
+          .then(res => (this.images = this.chunk(res.data, this.divsCount)));
+      } catch (err) {
+        throw err;
       }
-      const { getApi } = await this.axios.get(this.unsplashUrl, {
-        params: { client_id: process.env.VUE_APP_API_KEY }
-      });
     }
   },
-  async mounted() {
-    try {
-      const { getApi } = await this.axios
-        .get(`${this.unsplashUrl}`, {
-          params: { client_id: process.env.VUE_APP_API_KEY }
-        })
-        .then(res => (this.images = this.chunk(res.data, this.divsCount)));
-    } catch (err) {
-      throw err;
-    }
+  mounted() {
+    this.getImages(this.page, 30);
   }
 };
 </script>
