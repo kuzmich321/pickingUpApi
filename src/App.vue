@@ -27,8 +27,7 @@ export default {
 }
 
 #app {
-  height: 100vh;
-  background-color: #fff;
+  background-color: #333;
 }
 
 .container {

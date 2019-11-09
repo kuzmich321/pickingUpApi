@@ -1,19 +1,22 @@
 <template>
   <div>
-    <div class="showcase">
+    <div class="showcase focus-in">
       <div class="photos-wrapper" v-for="divsCount in images">
         <app-image-item v-for="image in divsCount" :image="image"></app-image-item>
       </div>
     </div>
-    <button @click="getImages(2, 30)">Second</button>
-    <app-pagination @currentPageRecieved="getImages(page, 30)"></app-pagination>
+    <paginate
+      :pageCount="totalPages"
+      :clickHandler="getImages"
+      :containerClass="'pagination'"
+      :pageClass="'pagination--item'"
+    ></paginate>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import ImageItem from "./ImageItem.vue";
-import Pagination from "./Pagination.vue";
 import Unsplash, { toJson } from "unsplash-js";
 
 export default {
@@ -21,12 +24,12 @@ export default {
     return {
       unsplashUrl: process.env.VUE_APP_UNSPLASH_URL,
       images: [],
-      divsCount: 3
+      divsCount: 3,
+      totalPages: 10
     };
   },
   components: {
-    appImageItem: ImageItem,
-    appPagination: Pagination
+    appImageItem: ImageItem
   },
   methods: {
     chunk(arr, size) {
@@ -36,7 +39,7 @@ export default {
         (v, i) => arr.slice(i * optimalSize, i * optimalSize + optimalSize)
       );
     },
-    getImages(page, per_page) {
+    getImages(page, per_page = 30) {
       try {
         axios
           .get(this.unsplashUrl, {
@@ -53,12 +56,12 @@ export default {
     }
   },
   mounted() {
-    this.getImages(this.page, 30);
+    this.getImages(1, 30);
   }
 };
 </script>
 
-<style scoped>
+<style>
 .showcase {
   display: flex;
   flex-wrap: wrap;
@@ -70,6 +73,61 @@ export default {
 .photos-wrapper {
   max-width: 33%;
   padding: 0 5px;
+}
+
+.pagination {
+  width: 70%;
+  padding: 30px;
+  margin: auto;
+  display: flex;
+  justify-content: space-around;
+  background-color: #f4f4f4;
+  transition: all 0.5s;
+}
+
+ul {
+  list-style: none;
+}
+
+.pagination--item {
+  width: 20px;
+  height: 20px;
+  text-align: center;
+}
+
+.active {
+  border: 2px solid lightcoral;
+  border-radius: 50%;
+}
+
+.focus-in {
+  -webkit-animation: focus-in 0.7s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+  animation: focus-in 0.7s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
+}
+
+@-webkit-keyframes focus-in {
+  0% {
+    -webkit-filter: blur(12px);
+    filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-filter: blur(0px);
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+@keyframes focus-in {
+  0% {
+    -webkit-filter: blur(12px);
+    filter: blur(12px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-filter: blur(0px);
+    filter: blur(0px);
+    opacity: 1;
+  }
 }
 
 @media screen and (max-width: 880px) {

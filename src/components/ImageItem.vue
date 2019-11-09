@@ -7,7 +7,16 @@
 <script>
 export default {
   props: { image: Object },
-  methods: {}
+  data() {
+    return {
+      isActive: false
+    };
+  },
+  methods: {
+    getClickedImg() {
+      this.isActive = !this.isActive;
+    }
+  }
 };
 </script>
 
@@ -16,5 +25,34 @@ export default {
   margin-top: 8px;
   vertical-align: middle;
   width: 100%;
+  cursor: pointer;
+}
+
+.single-image img:hover {
+  -webkit-animation: blink-2 0.9s both;
+  animation: blink-2 0.9s both;
+}
+
+@-webkit-keyframes blink-2 {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes blink-2 {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 </style>

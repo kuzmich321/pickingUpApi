@@ -33,7 +33,7 @@ export default {
 header {
   width: 100%;
   height: 60px;
-  border-bottom: 1px solid #;
+  border-bottom: 1px solid #612a30;
   margin: auto;
   margin-bottom: 30px;
   background-color: #151515;

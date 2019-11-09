@@ -1,5 +1,5 @@
 <template>
-  <section class="container">
+  <section class="container bg-pan-left">
     <app-images></app-images>
   </section>
 </template>
