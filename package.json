@@ -22,7 +22,7 @@
     "jw-vue-pagination": "^1.0.3",
     "morgan": "^1.9.1",
     "node-fetch": "^2.6.0",
-    "nodemon": "^1.19.3",
+    "nodemon": "^1.19.4",
     "universal-config": "^0.3.0",
     "universal-env": "^2.0.0",
     "unsplash-js": "^5.0.0",

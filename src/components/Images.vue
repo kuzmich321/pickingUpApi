@@ -18,6 +18,7 @@
 import axios from "axios";
 import ImageItem from "./ImageItem.vue";
 import Unsplash, { toJson } from "unsplash-js";
+import { EventBus } from "../event-bus";
 
 export default {
   data() {
@@ -25,7 +26,8 @@ export default {
       unsplashUrl: process.env.VUE_APP_UNSPLASH_URL,
       images: [],
       divsCount: 3,
-      totalPages: 10
+      totalPages: 10,
+      keyword: ""
     };
   },
   components: {
@@ -53,10 +55,37 @@ export default {
       } catch (err) {
         throw err;
       }
+    },
+    searchImages(query, page, per_page = 30) {
+      if (this.keyword !== "") {
+        try {
+          axios
+            .get(this.unsplashUrl, {
+              params: {
+                client_id: process.env.VUE_APP_API_KEY,
+                query: this.keyword,
+                page,
+                per_page
+              }
+            })
+            .then(res => (this.images = this.chunk(res.data, this.divsCount)));
+        } catch (err) {
+          throw err;
+        }
+      }
+    },
+    getInputValue(data) {
+      this.keyword = data;
     }
   },
   mounted() {
     this.getImages(1, 30);
+    EventBus.$on("inputValueRecieved", data => this.getInputValue(data));
+  },
+  watch: {
+    keyword: function() {
+      this.searchImages(this.keyword, 1, 10);
+    }
   }
 };
 </script>

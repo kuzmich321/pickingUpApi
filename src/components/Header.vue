@@ -2,8 +2,8 @@
   <header>
     <div class="header-wrapper">
       <div class="search">
-        <input type="text" class="search-form" :placeholder="defaultSearchMsg" />
-        <button type="submit" class="search-btn btn">
+        <input type="text" class="search-form" :placeholder="defaultSearchMsg" v-model="keyword" />
+        <button type="submit" class="search-btn btn" @click="getInputValue">
           <i class="fa fa-search"></i>
         </button>
       </div>
@@ -20,11 +20,23 @@
 </template>
 
 <script>
+import { EventBus } from "../event-bus";
+
 export default {
   data() {
     return {
-      defaultSearchMsg: "What are you looking for?!"
+      defaultSearchMsg: "What are you looking for?!",
+      keyword: ""
     };
+  },
+  methods: {
+    getInputValue() {
+      const keyword = this.keyword;
+
+      EventBus.$emit("inputValueRecieved", keyword);
+
+      this.keyword = "";
+    }
   }
 };
 </script>
