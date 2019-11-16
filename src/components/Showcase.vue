@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Images from "./Images.vue";
+import Images from './Images.vue';
 
 export default {
   components: {

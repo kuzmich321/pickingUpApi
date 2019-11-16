@@ -1,10 +1,21 @@
 <template>
   <div>
     <div class="showcase focus-in">
-      <div class="photos-wrapper" v-for="divsCount in images">
-        <app-image-item v-for="image in divsCount" :image="image"></app-image-item>
+      <div class="photos-wrapper" v-for="divsCount in imagesForDivs">
+        <app-image-item
+          v-for="image in divsCount"
+          :image="image"
+        ></app-image-item>
       </div>
     </div>
+    <transition>
+      <hooper :settings="hooperSettings" v-if="isActive" :class="'focus-in'">
+        <slide v-for="image in images">
+          <img :src="image.urls.regular" />
+        </slide>
+        <hooper-navigation slot="hooper-addons"></hooper-navigation>
+      </hooper>
+    </transition>
     <paginate
       :pageCount="totalPages"
       :clickHandler="getImages"
@@ -15,23 +26,34 @@
 </template>
 
 <script>
-import axios from "axios";
-import ImageItem from "./ImageItem.vue";
-import Unsplash, { toJson } from "unsplash-js";
-import { EventBus } from "../event-bus";
+import axios from 'axios';
+import ImageItem from './ImageItem.vue';
+import Unsplash, { toJson } from 'unsplash-js';
+import { EventBus } from '../event-bus';
+import { Hooper, Slide, Navigation as HooperNavigation } from 'hooper';
+import 'hooper/dist/hooper.css';
 
 export default {
   data() {
     return {
       unsplashUrl: process.env.VUE_APP_UNSPLASH_URL,
       images: [],
+      imagesForDivs: [],
       divsCount: 3,
       totalPages: 10,
-      keyword: ""
+      keyword: '',
+      isActive: false,
+      hooperSettings: {
+        centerMode: true,
+        infiniteScroll: true
+      }
     };
   },
   components: {
-    appImageItem: ImageItem
+    appImageItem: ImageItem,
+    Hooper,
+    Slide,
+    HooperNavigation
   },
   methods: {
     chunk(arr, size) {
@@ -51,41 +73,45 @@ export default {
               per_page
             }
           })
-          .then(res => (this.images = this.chunk(res.data, this.divsCount)));
+          .then(
+            res => (
+              (this.images = res.data),
+              (this.imagesForDivs = this.chunk(res.data, this.divsCount))
+            )
+          );
       } catch (err) {
         throw err;
       }
     },
     searchImages(query, page, per_page = 30) {
-      if (this.keyword !== "") {
-        try {
-          axios
-            .get(this.unsplashUrl, {
-              params: {
-                client_id: process.env.VUE_APP_API_KEY,
-                query: this.keyword,
-                page,
-                per_page
-              }
-            })
-            .then(res => (this.images = this.chunk(res.data, this.divsCount)));
-        } catch (err) {
-          throw err;
-        }
+      try {
+        axios
+          .get(this.unsplashUrl, {
+            params: {
+              client_id: process.env.VUE_APP_API_KEY,
+              query,
+              page,
+              per_page
+            }
+          })
+          .then(
+            res => (
+              (this.images = res.data),
+              (this.imagesForDivs = this.chunk(res.data, this.divsCount))
+            )
+          );
+      } catch (err) {
+        throw err;
       }
     },
-    getInputValue(data) {
-      this.keyword = data;
+    asd() {
+      console.log(this.keyword);
     }
   },
   mounted() {
     this.getImages(1, 30);
-    EventBus.$on("inputValueRecieved", data => this.getInputValue(data));
-  },
-  watch: {
-    keyword: function() {
-      this.searchImages(this.keyword, 1, 10);
-    }
+    EventBus.$on('inputValueRecieved', data => (this.keyword = data));
+    EventBus.$on('isActivePropRecieved', data => (this.isActive = data));
   }
 };
 </script>
@@ -130,22 +156,36 @@ ul {
 }
 
 .focus-in {
-  -webkit-animation: focus-in 0.7s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
   animation: focus-in 0.7s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
 }
 
-@-webkit-keyframes focus-in {
-  0% {
-    -webkit-filter: blur(12px);
-    filter: blur(12px);
-    opacity: 0;
-  }
-  100% {
-    -webkit-filter: blur(0px);
-    filter: blur(0px);
-    opacity: 1;
-  }
+.hooper {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
 }
+
+.hooper-slide {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+svg {
+  width: 50px;
+  height: 50px;
+}
+
+svg > path:nth-child(3) {
+  fill: #fff;
+}
+
 @keyframes focus-in {
   0% {
     -webkit-filter: blur(12px);

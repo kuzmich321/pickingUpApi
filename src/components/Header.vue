@@ -1,8 +1,13 @@
 <template>
   <header>
     <div class="header-wrapper">
-      <div class="search">
-        <input type="text" class="search-form" :placeholder="defaultSearchMsg" v-model="keyword" />
+      <div class="search scale-in-hor-left">
+        <input
+          type="text"
+          class="search-form"
+          :placeholder="defaultSearchMsg"
+          v-model="keyword"
+        />
         <button type="submit" class="search-btn btn" @click="getInputValue">
           <i class="fa fa-search"></i>
         </button>
@@ -20,22 +25,20 @@
 </template>
 
 <script>
-import { EventBus } from "../event-bus";
+import { EventBus } from '../event-bus';
 
 export default {
   data() {
     return {
-      defaultSearchMsg: "What are you looking for?!",
-      keyword: ""
+      defaultSearchMsg: 'What are you looking for?!',
+      keyword: ''
     };
   },
   methods: {
     getInputValue() {
-      const keyword = this.keyword;
+      EventBus.$emit('inputValueRecieved', this.keyword);
 
-      EventBus.$emit("inputValueRecieved", keyword);
-
-      this.keyword = "";
+      this.keyword = '';
     }
   }
 };
@@ -106,5 +109,22 @@ header {
   background: none;
   border: none;
   transition: all 0.3s;
+}
+
+.scale-in-hor-left {
+  animation: scale-in-hor-left 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes scale-in-hor-left {
+  0% {
+    transform: scaleX(0);
+    transform-origin: 0% 0%;
+    opacity: 1;
+  }
+  100% {
+    transform: scaleX(1);
+    transform-origin: 0% 0%;
+    opacity: 1;
+  }
 }
 </style>

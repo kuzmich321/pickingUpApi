@@ -1,10 +1,11 @@
 <template>
   <div class="single-image">
-    <img :src="image.urls.small" @click="getClickedImg" :class="{chosen: isActive}" alt />
+    <img :src="image.urls.small" @click="getClickedImg" alt />
   </div>
 </template>
 
 <script>
+import { EventBus } from '../event-bus';
 export default {
   props: { image: Object },
   data() {
@@ -15,9 +16,8 @@ export default {
   methods: {
     getClickedImg() {
       this.isActive = !this.isActive;
-      if (isActive) {
-        document.getElementsByClassName("img").attr("src", "image.urls.full");
-      }
+
+      EventBus.$emit('isActivePropRecieved', this.isActive);
     }
   }
 };
@@ -37,6 +37,8 @@ export default {
 }
 
 .chosen {
+  width: 100%;
+  height: 100%;
   position: fixed;
   z-index: 1;
   left: 0;

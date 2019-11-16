@@ -11,18 +11,5 @@ const unsplash = new Unsplash({
 });
 
 router.get('/');
-// , async (req, res) => {
-//   try {
-//     const photos = await unsplash.photos
-//       .listPhotos(1, 30)
-//       .then(toJson)
-//       .then(json => res.json(json));
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).json({
-//       message: 'Server error'
-//     });
-//   }
-// });
 
 module.exports = router;
