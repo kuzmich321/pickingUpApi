@@ -34,6 +34,7 @@ export default {
   data() {
     return {
       unsplashUrl: process.env.VUE_APP_UNSPLASH_URL,
+      unsplashSearchUrl: process.env.VUE_APP_UNSPLASH_SEARCH_URL,
       images: [],
       imagesForDivs: [],
       divsCount: 3,
@@ -83,7 +84,7 @@ export default {
     searchImages(query, page, per_page = 30) {
       try {
         axios
-          .get(this.unsplashUrl, {
+          .get(this.unsplashSearchUrl, {
             params: {
               client_id: process.env.VUE_APP_API_KEY,
               query,
@@ -100,15 +101,18 @@ export default {
       } catch (err) {
         throw err;
       }
-    },
-    asd() {
-      console.log(this.keyword);
     }
   },
   mounted() {
     this.getImages(1, 30);
     EventBus.$on("inputValueRecieved", data => (this.keyword = data));
     EventBus.$on("isActivePropRecieved", data => (this.isActive = data));
+  },
+  watch: {
+    keyword: function() {
+      this.searchImages(this.keyword, 1, 30);
+      console.log(this.keyword);
+    }
   }
 };
 </script>
