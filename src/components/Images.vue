@@ -2,10 +2,7 @@
   <div>
     <div class="showcase focus-in">
       <div class="photos-wrapper" v-for="divsCount in imagesForDivs">
-        <app-image-item
-          v-for="image in divsCount"
-          :image="image"
-        ></app-image-item>
+        <app-image-item v-for="image in divsCount" :image="image"></app-image-item>
       </div>
     </div>
     <transition>
@@ -26,12 +23,12 @@
 </template>
 
 <script>
-import axios from 'axios';
-import ImageItem from './ImageItem.vue';
-import Unsplash, { toJson } from 'unsplash-js';
-import { EventBus } from '../event-bus';
-import { Hooper, Slide, Navigation as HooperNavigation } from 'hooper';
-import 'hooper/dist/hooper.css';
+import axios from "axios";
+import ImageItem from "./ImageItem.vue";
+import Unsplash, { toJson } from "unsplash-js";
+import { EventBus } from "../event-bus";
+import { Hooper, Slide, Navigation as HooperNavigation } from "hooper";
+import "hooper/dist/hooper.css";
 
 export default {
   data() {
@@ -41,7 +38,7 @@ export default {
       imagesForDivs: [],
       divsCount: 3,
       totalPages: 10,
-      keyword: '',
+      keyword: "",
       isActive: false,
       hooperSettings: {
         centerMode: true,
@@ -110,8 +107,8 @@ export default {
   },
   mounted() {
     this.getImages(1, 30);
-    EventBus.$on('inputValueRecieved', data => (this.keyword = data));
-    EventBus.$on('isActivePropRecieved', data => (this.isActive = data));
+    EventBus.$on("inputValueRecieved", data => (this.keyword = data));
+    EventBus.$on("isActivePropRecieved", data => (this.isActive = data));
   }
 };
 </script>
