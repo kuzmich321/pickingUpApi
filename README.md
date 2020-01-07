@@ -1,18 +1,1 @@
-# api-tumblr
-
-> A Vue.js project
-
-## Build Setup
-
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+This is a small project on Vue. I used UNSPLASH api to build a small app around it. It's almost done but seeking small details that haven't been added yet. Just a little bit lazy to write some HTML and CSS right now
